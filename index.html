@@ -6,41 +6,54 @@
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <h1>CRM con IndexedDB - Proyecto para alumnos</h1>
+<main>
+    <header>
+        <h1>CRM con IndexedDB - Proyecto para alumnos</h1>
+        <div>Bienvenido/a, <span id="user-name"></span>!</div>
+    </header>
 
-    <form id="client-form" autocomplete="off">
-        <label>Nombre completo:</label>
-        <input id="name" name="name" type="text" placeholder="Nombre completo" required>
+    <section>
+        <form id="client-form" autocomplete="off">
+            <label for="name">Nombre completo:</label>
+            <input id="name" name="name" type="text" placeholder="Nombre completo" required>
 
-        <label>Email:</label>
-        <input id="email" name="email" type="email" placeholder="ejemplo@dominio.com" required>
+            <label for="email">Email:</label>
+            <input id="email" name="email" type="email" placeholder="ejemplo@dominio.com" required>
 
-        <label>Teléfono:</label>
-        <input id="phone" name="phone" type="text" placeholder="123-456-7890" required>
+            <label for="phone">Teléfono:</label>
+            <input id="phone" name="phone" type="text" placeholder="123-456-7890" required>
 
-        <button id="add-btn" type="submit" disabled>
-            Agregar Cliente
-        </button>
-    </form>
+            <button id="add-btn" type="submit" disabled>
+                Agregar Cliente
+            </button>
+        </form>
+    </section>
 
-    <h2>Listado de Clientes</h2>
-    <table>
-        <thead>
+    <section>
+        <h2>Listado de Clientes</h2>
+        <div>
+            <label for="search-client"><strong>Buscar cliente:</strong></label>
+            <input id="search-client" type="text" placeholder="Buscar por nombre, email o teléfono" aria-label="Buscar cliente">
+        </div>
+        <table>
+            <thead>
             <tr>
                 <th>Nombre</th>
                 <th>Email</th>
                 <th>Teléfono</th>
                 <th>Acciones</th>
             </tr>
-        </thead>
-        <tbody id="clients-list">
+            </thead>
+            <tbody id="clients-list">
             <!-- Los clientes se mostrarán aquí dinámicamente -->
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </section>
 
-    <div id="message" style="color: red; margin-top: 1em;"></div>
-
-    <script src="js/crm-indexeddb.js"></script>
+    <footer>
+        <div id="message" style="color: red; margin-top: 1em;"></div>
+    </footer>
+</main>
+<script src="js/crm-indexeddb.js"></script>
 </body>
 </html>
-

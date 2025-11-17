@@ -28,6 +28,26 @@ document.addEventListener('DOMContentLoaded', function() {
         fetchClients();
     }
 
+    const userNameSpan = document.getElementById('user-name');
+
+    // Función que pide el nombre del usuario y lo guarda en localStorage
+    function askUserName() {
+        let name = "";
+        do {
+            name = prompt("¿Cómo quieres que te llame la aplicación?");
+            if (name === null) name = ""; // Si cancela, vuelve a preguntar
+            name = name.trim();
+        } while (!name); // Obliga a poner algo
+        localStorage.setItem('crmUserName', name);
+        return name;
+    }
+
+    let userName = localStorage.getItem('crmUserName');
+    if (!userName) {
+        userName = askUserName();
+    }
+    if (userNameSpan) userNameSpan.textContent = userName;
+
     const form = document.getElementById('client-form');
     const addBtn = document.getElementById('add-btn');
     const inputs = form ? form.querySelectorAll('input') : [];
@@ -334,6 +354,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // --- ELIMINAR CLIENTE ---
     window.deleteClient = function(id) {
+        if (!window.confirm('¿Estás seguro de que quieres eliminar este cliente?')) return;
         if (!db) return;
         const transaction = db.transaction(['clients'], 'readwrite');
         const store = transaction.objectStore('clients');
@@ -344,7 +365,10 @@ document.addEventListener('DOMContentLoaded', function() {
         };
 
         transaction.onerror = function(e) {
-            alert("Error al eliminar el cliente: " + (e.target.error?.message || e.target.error));
+            if (messageEl) {
+                messageEl.style.color = 'red';
+                messageEl.textContent = "Error al eliminar el cliente: " + (e.target.error?.message || e.target.error);
+            }
         };
     };
 
@@ -355,6 +379,24 @@ document.addEventListener('DOMContentLoaded', function() {
           .replace(/>/g, '&gt;')
           .replace(/"/g, '&quot;')
           .replace(/'/g, '&#039;');
+    }
+
+    // Filtro en tiempo real de la tabla de clientes
+    const searchInput = document.getElementById('search-client');
+    if (searchInput) {
+        searchInput.addEventListener('input', function () {
+            filterClients(this.value.trim().toLowerCase());
+        });
+    }
+
+    function filterClients(query) {
+        const rows = document.querySelectorAll('#clients-list tr');
+        rows.forEach(row => {
+            const cells = row.querySelectorAll('td');
+            // Solo buscamos en las tres primeras celdas (nombre, email, teléfono)
+            const match = [...cells].slice(0,3).some(cell => cell.textContent.toLowerCase().includes(query));
+            row.style.display = match ? '' : 'none';
+        });
     }
 
     // inicial validation
